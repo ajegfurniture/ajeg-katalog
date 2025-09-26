@@ -1,0 +1,71 @@
+// Ajeg Furniture Catalog Schema - READ ONLY
+// Based on ERD with Category -> SubCategory -> Product -> ProductImages flow
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  isActive  Boolean? @map("is_active")
+  createdAt DateTime? @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  
+  // Relations
+  subCategories SubCategory[]
+  products      Product[]     @relation("CategoryToProduct")
+  
+  @@map("product_categories")
+}
+
+model SubCategory {
+  id          Int       @id @default(autoincrement())
+  categoryId  Int       @map("category_fkid")
+  name        String?
+  isActive    Boolean?  @map("is_active")
+  createdAt   DateTime? @map("created_at")
+  updatedAt   DateTime? @map("updated_at")
+  
+  // Relations
+  category    Category  @relation(fields: [categoryId], references: [id])
+  products    Product[]
+  
+  @@map("product_sub_categories")
+}
+
+model Product {
+  id            Int             @id @default(autoincrement())
+  name          String?
+  description   String?
+  price         Decimal?        @db.Decimal(12, 2) @map("tmp_price_sell")
+  categoryId    Int?            @map("category_fkid")
+  subCategoryId Int?            @map("sub_category_fkid")
+  isActive      Boolean?        @default(true) @map("is_active")
+  createdAt     DateTime?       @map("created_at")
+  updatedAt     DateTime?       @map("updated_at")
+  
+  // Relations
+  category      Category?       @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  subCategory   SubCategory?    @relation(fields: [subCategoryId], references: [id])
+  images        ProductImage[]
+  
+  @@map("products")
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  productId Int?    @map("product_fkid")
+  image     String?
+  isVariant Boolean? @default(false) @map("is_variant")
+  
+  // Relations
+  product   Product? @relation(fields: [productId], references: [id])
+  
+  @@map("product_images")
+}
