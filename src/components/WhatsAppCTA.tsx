@@ -8,8 +8,8 @@ interface WhatsAppCTAProps {
 
 export function WhatsAppCTA({ productName }: WhatsAppCTAProps) {
   const whatsappNumbers = {
-    bekasi: '6281234567890', // Ganti dengan nomor WA Bekasi yang sebenarnya
-    jogja: '6281234567891',  // Ganti dengan nomor WA Jogja yang sebenarnya
+    bekasi: '6287723466669', // Ganti dengan nomor WA Bekasi yang sebenarnya
+    jogja: '6287839070444',  // Ganti dengan nomor WA Jogja yang sebenarnya
   };
 
   const generateWhatsAppMessage = (location: 'bekasi' | 'jogja') => {
