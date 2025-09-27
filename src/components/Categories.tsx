@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { loadingController } from '@/lib/loadingController';
+import { useRouter } from 'next/navigation';
 import { CategoryWithSubCategories } from '@/lib/queries';
 import { Sofa, Bed, Utensils, Computer, Armchair, Lamp, Tv, Bath, Boxes, Ellipsis, Palette, Gift, Archive, Table } from 'lucide-react';
 
@@ -9,10 +11,11 @@ interface CategoriesProps {
 }
 
 export default function Categories({ categories }: CategoriesProps) {
-  const [activeCategory, setActiveCategory] = useState(categories[0]?.id || 1);
+  const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const router = useRouter();
 
   // Choose icon based on category name
-  const getCategoryIcon = (name?: string) => {
+  const getCategoryIcon = (name?: string | null) => {
     const n = (name || '').toLowerCase();
     // Specific Indonesian names first
     if (/^bantal$/.test(n)) return <Bed className="w-6 h-6" />; // pillow -> bed context
@@ -49,7 +52,7 @@ export default function Categories({ categories }: CategoriesProps) {
 
   // Sort categories so that "Lainnya" (or similar) is always at the end
   const sortedCategories = useMemo(() => {
-    const isOthers = (name?: string) => !!(name && /(lainnya|others|other)/i.test(name));
+    const isOthers = (name?: string | null) => !!(name && /(lainnya|others|other)/i.test(name));
     return [...categories].sort((a, b) => {
       const aOthers = isOthers(a.name);
       const bOthers = isOthers(b.name);
@@ -61,6 +64,12 @@ export default function Categories({ categories }: CategoriesProps) {
     });
   }, [categories]);
 
+  const handleCategoryClick = (categoryId: number) => {
+    setActiveCategory(categoryId);
+    loadingController.show();
+    router.push(`/products?category=${categoryId}`);
+  };
+
   return (
     <section className="px-4 py-5">
       <h2 className="text-xl font-semibold text-[#0D1B1A] mb-5">Kategori</h2>
@@ -68,17 +77,17 @@ export default function Categories({ categories }: CategoriesProps) {
         {sortedCategories.map((category) => (
           <div
             key={category.id}
-            className={`border rounded-lg p-4 flex flex-col items-center space-y-2 cursor-pointer transition-all duration-200 ${
+            className={`border rounded-lg p-4 flex flex-col items-center space-y-2 cursor-pointer transition-all duration-200 hover:border-green-200 hover:bg-green-50 ${
               activeCategory === category.id
                 ? 'border-green-300 bg-green-50'
                 : 'border-gray-200'
             }`}
-            onClick={() => setActiveCategory(category.id)}
+            onClick={() => handleCategoryClick(category.id)}
           >
             <div className="w-10 h-10 bg-gray-100 rounded-lg mb-2 flex items-center justify-center text-[#0D1B1A]">
               {getCategoryIcon(category.name)}
             </div>
-            <span className={`text-xs text-center ${
+            <span className={`text-xs text-center transition-colors ${
               activeCategory === category.id
                 ? 'text-[#45A091] font-medium'
                 : 'text-[#0D1B1A]'

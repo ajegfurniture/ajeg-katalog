@@ -12,6 +12,7 @@ export default async function Home() {
   const safeProducts = products.map((p) => ({
     ...p,
     price: p.price ? Number(p.price as unknown as number) : null,
+    tmp_price_buy: p.tmp_price_buy ? Number(p.tmp_price_buy as unknown as number) : null,
   }));
 
   return (

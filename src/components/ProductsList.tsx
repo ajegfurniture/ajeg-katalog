@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CategoryWithSubCategories, ProductWithImages } from '@/lib/queries';
 import FilterDrawer from './FilterDrawer';
 import Header from './Header';
@@ -41,7 +42,7 @@ export default function ProductsList({
   }, [products, selectedCategoryId, selectedSubCategoryId]);
 
   // Format price helper
-  const formatPrice = (price: any) => {
+  const formatPrice = (price: number | null) => {
     if (!price) return 'Harga belum tersedia';
     const numPrice = typeof price === 'string' ? parseFloat(price) : Number(price);
     return new Intl.NumberFormat('id-ID', {
@@ -88,37 +89,46 @@ export default function ProductsList({
           {Array.from({ length: Math.ceil(filteredProducts.length / 2) }, (_, rowIndex) => (
             <div key={rowIndex} className="flex space-x-3">
               {filteredProducts.slice(rowIndex * 2, (rowIndex + 1) * 2).map((product) => (
-                <div key={product.id} className="bg-white rounded-lg overflow-hidden shadow-sm flex-1">
-                  <div className="w-full h-44 bg-gradient-to-br from-gray-200 to-gray-300 rounded-t-lg flex items-center justify-center relative overflow-hidden">
-                    {product.images && product.images.length > 0 && product.images[0].image ? (
-                      <Image 
-                        src={product.images[0].image} 
-                        alt={product.name || 'Product'} 
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                        }}
-                      />
-                    ) : null}
-                    <div className={`w-16 h-16 bg-gray-400 rounded-lg ${product.images && product.images.length > 0 && product.images[0].image ? 'hidden' : ''}`}></div>
+                <Link key={product.id} href={`/products/${product.id}`} className="flex-1">
+                  <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-full h-44 bg-gradient-to-br from-gray-200 to-gray-300 rounded-t-lg flex items-center justify-center relative overflow-hidden">
+                      {product.images && product.images.length > 0 && product.images[0].image ? (
+                        <Image 
+                          src={product.images[0].image} 
+                          alt={product.name || 'Product'} 
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                          onError={(e) => {
+                            e.currentTarget.src = '/api/placeholder/placeholder.png';
+                          }}
+                        />
+                      ) : (
+                        <Image 
+                          src="/api/placeholder/placeholder.png" 
+                          alt={product.name || 'Product'} 
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                        />
+                      )}
+                      <div className={`w-16 h-16 bg-gray-400 rounded-lg ${product.images && product.images.length > 0 && product.images[0].image ? 'hidden' : ''}`}></div>
+                    </div>
+                    <div className="p-3">
+                      <h3 className="text-sm font-medium text-[#0D1B1A] mb-1 line-clamp-2">
+                        {product.name || 'Unnamed Product'}
+                      </h3>
+                      <p className="text-sm text-[#45A091] font-medium">
+                        {formatPrice(product.price)}
+                      </p>
+                      {/* Category info */}
+                      <p className="text-xs text-gray-500 mt-1">
+                        {product.category?.name || 'Unknown Category'}
+                        {product.subCategory?.name && ` • ${product.subCategory.name}`}
+                      </p>
+                    </div>
                   </div>
-                  <div className="p-3">
-                    <h3 className="text-sm font-medium text-[#0D1B1A] mb-1 line-clamp-2">
-                      {product.name || 'Unnamed Product'}
-                    </h3>
-                    <p className="text-sm text-[#45A091] font-medium">
-                      {formatPrice(product.price)}
-                    </p>
-                    {/* Category info */}
-                    <p className="text-xs text-gray-500 mt-1">
-                      {product.category?.name || 'Unknown Category'}
-                      {product.subCategory?.name && ` • ${product.subCategory.name}`}
-                    </p>
-                  </div>
-                </div>
+                </Link>
               ))}
             </div>
           ))}

@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop ajeg-katalog",
+    "pm2:restart": "pm2 restart ajeg-katalog",
+    "pm2:reload": "pm2 reload ajeg-katalog",
+    "pm2:delete": "pm2 delete ajeg-katalog",
+    "pm2:logs": "pm2 logs ajeg-katalog",
+    "pm2:status": "pm2 status",
+    "pm2:monit": "pm2 monit"
+  }
+}

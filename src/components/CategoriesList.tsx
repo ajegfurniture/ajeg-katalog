@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { CategoryWithSubCategories } from '@/lib/queries';
-import { 
-  Sofa, Bed, Utensils, Computer, Armchair, Lamp, Tv, Bath, Boxes, 
-  Palette, Gift, Archive, Table, Ellipsis 
+import { loadingController } from '@/lib/loadingController';
+import {
+  Sofa, Bed, Utensils, Computer, Armchair, Lamp, Tv, Bath, Boxes,
+  Palette, Gift, Archive, Table, Ellipsis
 } from 'lucide-react';
 
 interface CategoriesListProps {
@@ -18,7 +19,7 @@ export default function CategoriesList({ categories }: CategoriesListProps) {
   const router = useRouter();
 
   // Choose icon based on category name
-  const getCategoryIcon = (name?: string) => {
+  const getCategoryIcon = (name?: string | null) => {
     const n = (name || '').toLowerCase();
     // Specific Indonesian names first
     if (/^bantal$/.test(n)) return <Bed className="w-6 h-6" />; // pillow -> bed context
@@ -67,10 +68,12 @@ export default function CategoriesList({ categories }: CategoriesListProps) {
   };
 
   const handleCategoryClick = (categoryId: number) => {
+    loadingController.show();
     router.push(`/products?category=${categoryId}`);
   };
 
   const handleSubCategoryClick = (subCategoryId: number) => {
+    loadingController.show();
     router.push(`/products?subcategory=${subCategoryId}`);
   };
 

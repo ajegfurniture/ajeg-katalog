@@ -5,3 +5,6 @@ export { default as BottomNavigation } from './BottomNavigation';
 export { default as FilterDrawer } from './FilterDrawer';
 export { default as ProductsList } from './ProductsList';
 export { default as CategoriesList } from './CategoriesList';
+export { ProductDetail } from './ProductDetail';
+export { WhatsAppCTA } from './WhatsAppCTA';
+export { default as Loading } from './Loading';

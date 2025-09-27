@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { X, ChevronDown, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { X, ChevronDown } from 'lucide-react';
 import { CategoryWithSubCategories } from '@/lib/queries';
 
 interface FilterDrawerProps {
@@ -62,15 +62,15 @@ export default function FilterDrawer({
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+        className="fixed inset-0 backdrop-blur-sm bg-white/20 z-40 transition-all duration-300"
         onClick={onClose}
       />
       
       {/* Drawer */}
-      <div className="fixed right-0 top-0 h-full w-80 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out">
+      <div className="fixed right-0 top-0 h-full w-80 bg-white/95 backdrop-blur-md shadow-xl z-50 transform transition-transform duration-300 ease-in-out border-l border-white/20">
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200/50 bg-white/50 backdrop-blur-sm">
             <h2 className="text-lg font-semibold text-[#0D1B1A]">Filter Produk</h2>
             <button
               onClick={onClose}
@@ -170,7 +170,7 @@ export default function FilterDrawer({
           </div>
 
           {/* Footer */}
-          <div className="p-4 border-t border-gray-200 space-y-3">
+          <div className="p-4 border-t border-gray-200/50 bg-white/50 backdrop-blur-sm space-y-3">
             <div className="flex space-x-3">
               <button
                 onClick={handleClear}

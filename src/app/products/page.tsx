@@ -1,4 +1,4 @@
-import { Header, BottomNavigation } from '@/components';
+import { BottomNavigation } from '@/components';
 import { getCategories, getProducts, getProductsBySubCategory } from '@/lib/queries';
 import ProductsList from '@/components/ProductsList';
 
@@ -30,6 +30,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const safeProducts = products.map((p) => ({
     ...p,
     price: p.price ? Number(p.price as unknown as number) : null,
+    tmp_price_buy: p.tmp_price_buy ? Number(p.tmp_price_buy as unknown as number) : null,
   }));
 
   return (
