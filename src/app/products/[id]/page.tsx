@@ -3,6 +3,9 @@ import { getProductById } from '@/lib/queries';
 import { ProductDetail } from '@/components/ProductDetail';
 import { Header, BottomNavigation } from '@/components';
 
+// Force dynamic rendering to prevent static generation during build
+export const dynamic = 'force-dynamic';
+
 interface ProductPageProps {
   params: {
     id: string;

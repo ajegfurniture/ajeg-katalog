@@ -2,6 +2,9 @@ import { BottomNavigation } from '@/components';
 import { getCategories, getProducts, getProductsBySubCategory } from '@/lib/queries';
 import ProductsList from '@/components/ProductsList';
 
+// Force dynamic rendering to prevent static generation during build
+export const dynamic = 'force-dynamic';
+
 interface ProductsPageProps {
   searchParams: {
     category?: string;

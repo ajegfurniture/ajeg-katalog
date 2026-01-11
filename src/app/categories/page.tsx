@@ -2,6 +2,9 @@ import { Header, BottomNavigation } from '@/components';
 import { getCategories } from '@/lib/queries';
 import CategoriesList from '@/components/CategoriesList';
 
+// Force dynamic rendering to prevent static generation during build
+export const dynamic = 'force-dynamic';
+
 export default async function CategoriesPage() {
   // Fetch categories from database
   const categories = await getCategories();

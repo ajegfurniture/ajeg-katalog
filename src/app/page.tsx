@@ -1,6 +1,9 @@
 import { Header, Categories, BestSeller, BottomNavigation } from '@/components';
 import { getCategories, getRandomProducts } from '@/lib/queries';
 
+// Force dynamic rendering to prevent static generation during build
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   // Fetch data from database
   const [categories, products] = await Promise.all([
