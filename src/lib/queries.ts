@@ -226,20 +226,10 @@ export async function searchProducts(query: string, limit: number = 20): Promise
   const products = await prisma.product.findMany({
     where: {
       isActive: true,
-      OR: [
-        {
-          name: {
-            contains: query,
-            mode: 'insensitive',
-          },
-        },
-        {
-          description: {
-            contains: query,
-            mode: 'insensitive',
-          },
-        },
-      ],
+      name: {
+        contains: query,
+        mode: 'insensitive',
+      },
     },
     include: {
       category: true,
